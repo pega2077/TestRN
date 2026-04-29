@@ -7,13 +7,13 @@ import {
   StatusBar,
   Platform,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 interface HeaderProps {
   title: string;
   showBack?: boolean;
   onBack?: () => void;
-  rightIcon?: React.ComponentProps<typeof Ionicons>['name'];
+  rightIcon?: string;
   onRightPress?: () => void;
 }
 

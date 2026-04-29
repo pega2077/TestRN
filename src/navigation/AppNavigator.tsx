@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import HomeScreen from '../screens/HomeScreen';
 import CustomerScreen from '../screens/CustomerScreen';
@@ -34,8 +34,7 @@ export default function AppNavigator() {
           fontWeight: '500',
         },
         tabBarIcon: ({ focused, color, size }) => {
-          type IoniconsName = React.ComponentProps<typeof Ionicons>['name'];
-          const icons: Record<string, [IoniconsName, IoniconsName]> = {
+          const icons: Record<string, [string, string]> = {
             首页: ['home', 'home-outline'],
             客户: ['people', 'people-outline'],
             销售: ['trending-up', 'trending-up-outline'],
