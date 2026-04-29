@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F7FA',
     borderWidth: 1, borderColor: '#E5E5EA',
     alignItems: 'center', justifyContent: 'center',
+    minHeight: 32, minWidth: 64,
   },
   filterBtnActive: { backgroundColor: '#4A90E2', borderColor: '#4A90E2' },
   filterText: { fontSize: 13, color: '#555', fontWeight: '500' },
