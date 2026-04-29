@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   Dimensions,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from '../components/Icon';
 import Header from '../components/Header';
 
 const { width } = Dimensions.get('window');
@@ -74,12 +74,12 @@ export default function AnalyticsScreen() {
           {kpiData.map((k) => (
             <View key={k.label} style={styles.kpiCard}>
               <View style={[styles.kpiIcon, { backgroundColor: k.color + '20' }]}>
-                <Ionicons name={k.icon} size={18} color={k.color} />
+                <Icon name={k.icon} size={18} color={k.color} />
               </View>
               <Text style={styles.kpiValue}>{k.value}</Text>
               <Text style={styles.kpiLabel}>{k.label}</Text>
               <View style={styles.kpiChange}>
-                <Ionicons
+                <Icon
                   name={k.up ? 'arrow-up' : 'arrow-down'}
                   size={10}
                   color={k.up ? '#34C759' : '#FF3B30'}

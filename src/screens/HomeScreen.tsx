@@ -7,44 +7,45 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
+import Icon from '../components/Icon';
 import Header from '../components/Header';
+import { useAppContext } from '../context/AppContext';
+import { RootStackParamList } from '../navigation/types';
 
 const summaryCards = [
-  { label: '总客户数', value: '128', icon: 'people' as const, color: '#4A90E2', bg: '#EBF4FF' },
-  { label: '本月成交', value: '14', icon: 'checkmark-circle' as const, color: '#34C759', bg: '#E8F8EC' },
-  { label: '待跟进', value: '23', icon: 'time' as const, color: '#FF9500', bg: '#FFF4E6' },
-  { label: '销售额', value: '¥86K', icon: 'trending-up' as const, color: '#AF52DE', bg: '#F5EEFF' },
-];
+  { label: '总客户数', dataKey: 'customers', icon: 'people', color: '#4A90E2', bg: '#EBF4FF' },
+  { label: '本月成交', value: '14', icon: 'checkmark-circle', color: '#34C759', bg: '#E8F8EC' },
+  { label: '待跟进', value: '23', icon: 'time', color: '#FF9500', bg: '#FFF4E6' },
+  { label: '销售额', value: '¥86K', icon: 'trending-up', color: '#AF52DE', bg: '#F5EEFF' },
+] as const;
 
-const recentContacts = [
-  { id: '1', name: '张三', company: '阿里巴巴', action: '电话沟通', time: '10:30', type: 'call' },
-  { id: '2', name: '李四', company: '腾讯', action: '邮件跟进', time: '09:15', type: 'email' },
-  { id: '3', name: '王五', company: '字节跳动', action: '线下拜访', time: '昨天', type: 'visit' },
-  { id: '4', name: '赵六', company: '美团', action: '微信沟通', time: '昨天', type: 'chat' },
-];
-
-const quickActions = [
-  { label: '添加客户', icon: 'person-add' as const, color: '#4A90E2' },
-  { label: '记录联系', icon: 'chatbubble' as const, color: '#34C759' },
-  { label: '新增销售', icon: 'cart' as const, color: '#FF9500' },
-  { label: '添加日程', icon: 'calendar' as const, color: '#AF52DE' },
-];
-
-const contactTypeIcon: Record<string, React.ComponentProps<typeof Ionicons>['name']> = {
-  call: 'call',
-  email: 'mail',
-  visit: 'walk',
-  chat: 'chatbubbles',
+const contactTypeIcon: Record<string, string> = {
+  call: 'call', email: 'mail', visit: 'walk', chat: 'chatbubbles',
 };
 const contactTypeColor: Record<string, string> = {
-  call: '#4A90E2',
-  email: '#34C759',
-  visit: '#FF9500',
-  chat: '#AF52DE',
+  call: '#4A90E2', email: '#34C759', visit: '#FF9500', chat: '#AF52DE',
 };
 
 export default function HomeScreen() {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const { customers, contacts } = useAppContext();
+
+  const quickActions = [
+    { label: '添加客户', icon: 'person-add', color: '#4A90E2', onPress: () => navigation.navigate('CustomerForm', {}) },
+    { label: '记录联系', icon: 'chatbubble', color: '#34C759', onPress: () => navigation.navigate('ContactForm', {}) },
+    { label: '新增销售', icon: 'cart', color: '#FF9500', onPress: () => navigation.navigate('SalesForm', {}) },
+    { label: '添加日程', icon: 'calendar', color: '#AF52DE', onPress: () => navigation.navigate('ScheduleForm', {}) },
+  ];
+
+  // Show most recent 4 contact records
+  const recentContacts = contacts.slice(0, 4);
+
+  const getSummaryValue = (card: typeof summaryCards[number]) => {
+    if ('dataKey' in card && card.dataKey === 'customers') return String(customers.length);
+    return 'value' in card ? card.value : '';
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Header title="客户管理" rightIcon="notifications-outline" />
@@ -53,7 +54,7 @@ export default function HomeScreen() {
         {/* Greeting */}
         <View style={styles.greeting}>
           <Text style={styles.greetingText}>你好，销售经理 👋</Text>
-          <Text style={styles.greetingDate}>2024年1月16日 星期二</Text>
+          <Text style={styles.greetingDate}>{new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}</Text>
         </View>
 
         {/* Summary Cards */}
@@ -61,9 +62,9 @@ export default function HomeScreen() {
           {summaryCards.map((c) => (
             <View key={c.label} style={[styles.summaryCard, { shadowColor: c.color }]}>
               <View style={[styles.iconWrap, { backgroundColor: c.bg }]}>
-                <Ionicons name={c.icon} size={22} color={c.color} />
+                <Icon name={c.icon} size={20} color={c.color} />
               </View>
-              <Text style={styles.summaryValue}>{c.value}</Text>
+              <Text style={styles.summaryValue}>{getSummaryValue(c)}</Text>
               <Text style={styles.summaryLabel}>{c.label}</Text>
             </View>
           ))}
@@ -74,9 +75,9 @@ export default function HomeScreen() {
           <Text style={styles.sectionTitle}>快捷操作</Text>
           <View style={styles.quickRow}>
             {quickActions.map((a) => (
-              <TouchableOpacity key={a.label} style={styles.quickBtn} activeOpacity={0.7}>
+              <TouchableOpacity key={a.label} style={styles.quickBtn} activeOpacity={0.7} onPress={a.onPress}>
                 <View style={[styles.quickIcon, { backgroundColor: a.color + '20' }]}>
-                  <Ionicons name={a.icon} size={22} color={a.color} />
+                  <Icon name={a.icon} size={22} color={a.color} />
                 </View>
                 <Text style={styles.quickLabel}>{a.label}</Text>
               </TouchableOpacity>
@@ -88,26 +89,32 @@ export default function HomeScreen() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>今日联系记录</Text>
-            <TouchableOpacity activeOpacity={0.7}>
-              <Text style={styles.viewAll}>查看全部</Text>
+            <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('ContactForm', {})}>
+              <Text style={styles.viewAll}>+ 新增</Text>
             </TouchableOpacity>
           </View>
-          {recentContacts.map((item) => (
-            <View key={item.id} style={styles.contactItem}>
-              <View style={[styles.contactIcon, { backgroundColor: (contactTypeColor[item.type] ?? '#4A90E2') + '20' }]}>
-                <Ionicons
-                  name={contactTypeIcon[item.type] ?? 'ellipse'}
-                  size={16}
-                  color={contactTypeColor[item.type] ?? '#4A90E2'}
-                />
-              </View>
-              <View style={styles.contactInfo}>
-                <Text style={styles.contactName}>{item.name}</Text>
-                <Text style={styles.contactCompany}>{item.company} · {item.action}</Text>
-              </View>
-              <Text style={styles.contactTime}>{item.time}</Text>
+          {recentContacts.length === 0 ? (
+            <View style={styles.emptyCard}>
+              <Text style={styles.emptyText}>暂无联系记录，点击右上角新增</Text>
             </View>
-          ))}
+          ) : (
+            recentContacts.map((item) => {
+              const iconName = contactTypeIcon[item.type] ?? 'chatbubbles';
+              const iconColor = contactTypeColor[item.type] ?? '#4A90E2';
+              return (
+                <View key={item.id} style={styles.contactItem}>
+                  <View style={[styles.contactIcon, { backgroundColor: iconColor + '20' }]}>
+                    <Icon name={iconName} size={16} color={iconColor} />
+                  </View>
+                  <View style={styles.contactInfo}>
+                    <Text style={styles.contactName}>{item.customer}</Text>
+                    <Text style={styles.contactCompany}>{item.company} · {item.type}</Text>
+                  </View>
+                  <Text style={styles.contactTime}>{item.date}</Text>
+                </View>
+              );
+            })
+          )}
         </View>
 
       </ScrollView>
@@ -246,4 +253,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#C7C7CC',
   },
+  emptyCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+  },
+  emptyText: { fontSize: 13, color: '#C7C7CC' },
 });

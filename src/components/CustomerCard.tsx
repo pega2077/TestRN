@@ -5,16 +5,10 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from './Icon';
+import { Customer } from '../types';
 
-export interface Customer {
-  id: string;
-  name: string;
-  company: string;
-  tags: string[];
-  lastContact: string;
-  phone: string;
-}
+export type { Customer };
 
 interface CustomerCardProps {
   customer: Customer;
@@ -57,19 +51,19 @@ export default function CustomerCard({ customer, onPress }: CustomerCardProps) {
         </View>
 
         <Text style={styles.company} numberOfLines={1}>
-          <Ionicons name="business-outline" size={12} color="#888" /> {customer.company}
+          <Icon name="business-outline" size={12} color="#888" /> {customer.company}
         </Text>
 
         <View style={styles.metaRow}>
-          <Ionicons name="call-outline" size={12} color="#888" />
+          <Icon name="call-outline" size={12} color="#888" />
           <Text style={styles.metaText}>{customer.phone}</Text>
           <View style={styles.dot} />
-          <Ionicons name="time-outline" size={12} color="#888" />
+          <Icon name="time-outline" size={12} color="#888" />
           <Text style={styles.metaText}>上次联系 {customer.lastContact}</Text>
         </View>
       </View>
 
-      <Ionicons name="chevron-forward" size={16} color="#C7C7CC" />
+      <Icon name="chevron-forward" size={16} color="#C7C7CC" />
     </TouchableOpacity>
   );
 }

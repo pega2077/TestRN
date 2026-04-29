@@ -7,7 +7,7 @@ import {
   StatusBar,
   Platform,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from './Icon';
 
 interface HeaderProps {
   title: string;
@@ -30,7 +30,7 @@ export default function Header({
       <View style={styles.inner}>
         {showBack ? (
           <TouchableOpacity style={styles.sideBtn} onPress={onBack} activeOpacity={0.7}>
-            <Ionicons name="chevron-back" size={24} color="#333" />
+            <Icon name="chevron-back" size={24} color="#333" />
           </TouchableOpacity>
         ) : (
           <View style={styles.sideBtn} />
@@ -42,7 +42,7 @@ export default function Header({
 
         {rightIcon ? (
           <TouchableOpacity style={styles.sideBtn} onPress={onRightPress} activeOpacity={0.7}>
-            <Ionicons name={rightIcon} size={24} color="#4A90E2" />
+            <Icon name={rightIcon} size={24} color="#4A90E2" />
           </TouchableOpacity>
         ) : (
           <View style={styles.sideBtn} />
