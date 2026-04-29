@@ -69,8 +69,8 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | null>(null);
 
-let _id = 200;
-function genId() { return String(++_id); }
+let nextId = 200;
+function genId() { return String(++nextId); }
 
 // ─── Provider ─────────────────────────────────────────────────────────────────
 

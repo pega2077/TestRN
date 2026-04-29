@@ -61,7 +61,7 @@ export default function Icon({ name, size = 24, color = '#000000', style }: Icon
   const char = ICON_MAP[name] ?? '■';
   return (
     <Text
-      style={[{ fontSize: size, color, lineHeight: size * 1.3, textAlign: 'center' }, style]}
+      style={[{ fontSize: size, color, lineHeight: size, textAlign: 'center' }, style]}
       numberOfLines={1}
       accessible={false}
     >
