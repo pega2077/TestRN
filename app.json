@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "客户管理",
+    "slug": "client-management-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "platforms": ["ios", "android"]
+  }
+}
